@@ -9,10 +9,10 @@ public interface DivisionService {
 	
 	public DivisionDto addDivision(Division Division);
 	
-	public DivisionDto updateDivision(String id,Division Division);
+	public DivisionDto updateDivision(Integer id,Division Division);
 
 	
-	public void deleteDivision(String id);
+	public void deleteDivision(Integer id);
 	
 	
 	public List<Division> getAllDivision();

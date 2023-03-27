@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ajex.dto.CityDto;
 import com.ajex.entity.City;
+import com.ajex.exception.ResourceNotFoundException;
 import com.ajex.repository.CityRepo;
 import com.ajex.service.CityService;
 
@@ -35,40 +37,62 @@ public class CityController {
 	
 	
 	@GetMapping("/getCities")
-	public List<City>  getAllCity()
+	public  ResponseEntity<?>  getAllCity()
 	{
-		
-		List<City>  allCities= cityService.getAllCity();
-		return allCities;
+		Map<Object,Object> m = new HashMap<>();
+
+		try {
+			List<City>  allCities= cityService.getAllCity();
+			
+             m.put("data",allCities );
+			
+			m.put("status","OK" );
+
+			m.put("statusCode","200" );
+			m.put("boolean","success");
+
+			return new ResponseEntity<>(m, HttpStatus.OK);
+			
+		}catch (Exception e) {
+			
+			return new ResponseEntity<Exception>(e, HttpStatus.BAD_REQUEST);
+		}
 		
 	}
+	
+
+
+	
+	
 	
 	
 	@PostMapping("/addCity")
-	public CityDto  addCity(@RequestBody   City city)
-	{
+	public ResponseEntity<?> addCity(@Validated @RequestBody City city) throws ResourceNotFoundException{
 		
-		CityDto  cityVal= cityService.addCity(city);
-		return cityVal;
+		
+			  CityDto  cityVal= cityService.addCity(city);
+			  
+			return new ResponseEntity<>(cityVal, HttpStatus.CREATED);
+			
 		
 	}
-	
 	
 	
 	@PostMapping("/updateCity/{id}")
 	
-		public CityDto updateCity(@PathVariable("id") String id, @RequestBody City city) {
+		public ResponseEntity<?> updateCity(@Validated @PathVariable("id") Integer id, @RequestBody City city) throws ResourceNotFoundException  {
 			
-				  
-				  return  cityService.updateCity(id, city);
-				  
-			  
-			 
+		 
+	    ResponseEntity<?>  cityUpdated = cityService.updateCity(id,city);
+		
+		return new ResponseEntity<>(cityUpdated, HttpStatus.CREATED);
+		
+		
 	}
 	
 	
 	@PostMapping("/deleteCity/{id}")
-	public Map<String,Object> deleteCity(@PathVariable String id)
+	public Map<String,Object> deleteCity(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

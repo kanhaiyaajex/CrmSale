@@ -9,10 +9,10 @@ public interface PositionService {
 	
 	public PositionDto addPosition(Position Position);
 	
-	public PositionDto updatePosition(String id,Position Position);
+	public PositionDto updatePosition(Integer id,Position Position);
 
 	
-	public void deletePosition(String id);
+	public void deletePosition(Integer id);
 	
 	
 	public List<Position> getAllPosition();

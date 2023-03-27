@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ajex.dto.CityGroupDto;
+import com.ajex.entity.City;
 import com.ajex.entity.CityGroup;
 import com.ajex.repository.CityGroupRepo;
 import com.ajex.service.CityGroupService;
 
 @RestController
-@RequestMapping("/api/v1/city_gr/")
+@RequestMapping("/api/v1/cityGroup/")
 public class CityGroupController {
 
 	
@@ -34,12 +35,24 @@ public class CityGroupController {
 	private CityGroupRepo  CityGroupRepo;
 	
 	
-	@GetMapping("/getCities")
-	public List<CityGroup>  getAllCityGroup()
+	@GetMapping("/getCityGroups")
+	public ResponseEntity<?> getAllCityGroup()
 	{
-		
+		Map<Object,Object> m = new HashMap<>();
 		List<CityGroup>  allCities= CityGroupService.getAllCityGroup();
-		return allCities;
+		
+		
+
+			
+             m.put("data",allCities );
+			
+			m.put("status","OK" );
+
+			m.put("statusCode","200" );
+			m.put("boolean","success");
+
+	     return new ResponseEntity<>(m, HttpStatus.OK);
+
 		
 	}
 	
@@ -56,11 +69,16 @@ public class CityGroupController {
 	
 	
 	@PostMapping("/updateCityGroup/{id}")
-	
-		public CityGroupDto updateCityGroup(@PathVariable("id") String id, @RequestBody CityGroup CityGroup) {
+	 
+		public ResponseEntity<?>  updateCityGroup(@PathVariable int id, @RequestBody CityGroup cityGroup) {
 			
 				  
-				  return  CityGroupService.updateCityGroup(id, CityGroup);
+		
+		 ResponseEntity<?>  cityGroupUpdated = CityGroupService.updateCityGroup(id, cityGroup);
+			
+	     return new ResponseEntity<>(cityGroupUpdated, HttpStatus.CREATED);
+			
+			
 				  
 			  
 			 
@@ -68,7 +86,7 @@ public class CityGroupController {
 	
 	
 	@PostMapping("/deleteCityGroup/{id}")
-	public Map<String,Object> deleteCityGroup(@PathVariable String id)
+	public Map<String,Object> deleteCityGroup(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

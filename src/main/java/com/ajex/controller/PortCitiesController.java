@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ajex.dto.PortCitiesDto;
+import com.ajex.entity.MeasureOfUnit;
 import com.ajex.entity.PortCities;
 import com.ajex.repository.PortCitiesRepo;
 import com.ajex.service.PortCitiesService;
@@ -35,11 +36,30 @@ public class PortCitiesController {
 	
 	
 	@GetMapping("/getCities")
-	public List<PortCities>  getAllPortCities()
+	public  ResponseEntity<?>  getAllPortCities()
 	{
 		
-		List<PortCities>  allCities= PortCitiesService.getAllPortCities();
-		return allCities;
+		List<PortCities>  allPortCities= PortCitiesService.getAllPortCities();
+		
+
+		
+		
+		Map<Object,Object> m = new HashMap<>();
+
+		
+		
+		
+
+			
+             m.put("data",allPortCities );
+			
+			m.put("status","OK" );
+
+			m.put("statusCode","200" );
+			m.put("boolean","success");
+			
+			 return new ResponseEntity<>(m, HttpStatus.OK);
+		
 		
 	}
 	
@@ -57,7 +77,7 @@ public class PortCitiesController {
 	
 	@PostMapping("/updatePortCities/{id}")
 	
-		public PortCitiesDto updatePortCities(@PathVariable("id") String id, @RequestBody PortCities PortCities) {
+		public PortCitiesDto updatePortCities(@PathVariable("id") Integer id, @RequestBody PortCities PortCities) {
 			
 				  
 				  return  PortCitiesService.updatePortCities(id, PortCities);
@@ -68,7 +88,7 @@ public class PortCitiesController {
 	
 	
 	@PostMapping("/deletePortCities/{id}")
-	public Map<String,Object> deletePortCities(@PathVariable String id)
+	public Map<String,Object> deletePortCities(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

@@ -2,10 +2,16 @@ package com.ajex.entity;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,31 +19,64 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "portCity")
+@Document(collection = "rateCard")
 public class RateCard {
 	
-	
+
+    @Transient
+    public static final String SEQUENCE_NAME = "ratecard_sequence";
+    
+    
 	@Id
-	private String rateCardId;
-	private String productId;
+	private Integer rateCardId;
 
-	private String subProductId;
+	
+    @NotNull(message = "SubProduct Id  is mandatory")
 
-	private String temperatureId;
+	private SubProduct subProductId;
 
-	private String originCityId;
+    
+    @NotNull(message = "Product Id  is mandatory")
 
-	private String destinationCityId;
+	private Product productId;
+
+	
+    @NotNull(message = "Temperature Id  is mandatory")
+
+	private Temperature temperatureId;
+    
+    
+    @NotNull(message = "OriginCity Id   is mandatory")
+
+	private City originCityId;
+
+    @NotNull(message = "Destination City Id  is mandatory")
+
+	private City destinationCityId;
+	
+    @NotNull(message = "Division  Id  is mandatory")
+
+	private Division  division;
+
+    @NotNull(message = "Base Price   is mandatory")
 
 	private BigDecimal basePrice;
 	
+	
+	
 	private boolean statusId;
 	
-	private Date createdDate;
-	private Date updatedDate;
+	@DateTimeFormat(pattern="dd.MM.yyyy hh:mm")
+	@CreatedDate
+	private LocalDateTime  createdAt;
+	
+	
+	@DateTimeFormat(pattern="dd.MM.yyyy hh:mm")
+	@LastModifiedDate
+	private LocalDateTime  modifiedAt;
+	
 
 	
-	private String divisionId;
 	
 	
 

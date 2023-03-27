@@ -4,6 +4,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.ajex.entity.PortCities;
 
-public interface PortCitiesRepo extends MongoRepository<PortCities, String> {
+public interface PortCitiesRepo extends MongoRepository<PortCities, Integer> {
 
 }

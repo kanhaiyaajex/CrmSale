@@ -3,6 +3,9 @@ package com.ajex.dto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ajex.entity.City;
+import com.ajex.entity.Country;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,19 +19,19 @@ import lombok.NoArgsConstructor;
 public class PortCitiesDto {
 	
 	
-	private String portId;
+    private Integer portId;
 	
-	private String portCitName;
+	private String portCityName;
 	
 	private String portType;
 	
-	private Integer cityId;;
+	private City cityId;;
 
 	
-	private Integer countryId;
+	private Country countryId;
 
 	
-	private String referenceId;
+	private Integer refId;
 
 	
 	private boolean statusId;

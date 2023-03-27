@@ -1,6 +1,13 @@
 package com.ajex.dto;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.ajex.entity.SubProduct;
 
 import lombok.Data;
 
@@ -10,20 +17,26 @@ public class TemperatureDto {
 	
 	
 	
-	
-	
-	private String temperatureId;
+private Integer temperatureId;
 	
 	private String name;
 	
-	private String subProductId;
+	private SubProduct subProductId;
 
 	
 	private boolean statusId;
 
 	
-	private String divisionName;
-
+	
+	@DateTimeFormat(pattern="dd.MM.yyyy hh:mm")
+	@CreatedDate
+	private LocalDateTime  createdAt;
+	
+	
+	@DateTimeFormat(pattern="dd.MM.yyyy hh:mm")
+	@LastModifiedDate
+	private LocalDateTime  modifiedAt;
+	
 	
 	
 	

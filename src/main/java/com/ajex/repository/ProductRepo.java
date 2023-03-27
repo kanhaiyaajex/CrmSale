@@ -4,6 +4,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.ajex.entity.Product;
 
-public interface ProductRepo extends MongoRepository<Product, String> {
+public interface ProductRepo extends MongoRepository<Product, Integer> {
 
 }

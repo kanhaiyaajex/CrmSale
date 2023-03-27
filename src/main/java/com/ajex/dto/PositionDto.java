@@ -3,6 +3,7 @@ package com.ajex.dto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,16 @@ public class PositionDto {
 	
 	
 	
+private Integer positionId;
 	
-	private String positionId;
-	
+    @NotNull(message = "Position Name is mandatory")
+
 	private String positionName;
-	
+    
+    
+    @NotNull(message = "Order Id  is mandatory")
+
+    
 	private String orderId;
 	
 	private boolean statusId;

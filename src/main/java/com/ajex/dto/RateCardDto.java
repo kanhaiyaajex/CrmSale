@@ -2,9 +2,19 @@ package com.ajex.dto;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.ajex.entity.City;
+import com.ajex.entity.Division;
+import com.ajex.entity.Product;
+import com.ajex.entity.SubProduct;
+import com.ajex.entity.Temperature;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,31 +23,41 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "portCity")
 public class RateCardDto {
 	
 	
-	@Id
-	private String rateCardId;
-	private String productId;
+	
+	private Integer rateCardId;
 
-	private String subProductId;
+	private SubProduct subProductId;
 
-	private String temperatureId;
+	private Product productId;
 
-	private String originCityId;
+	
+	
+	private Temperature temperatureId;
 
-	private String destinationCityId;
+	private City originCityId;
+
+	private City destinationCityId;
+	
+	private Division  division;
+
 
 	private BigDecimal basePrice;
 	
+	
+	
 	private boolean statusId;
 	
-	private Date createdDate;
-	private Date updatedDate;
-
+	@DateTimeFormat(pattern="dd.MM.yyyy hh:mm")
+	@CreatedDate
+	private LocalDateTime  createdAt;
 	
-	private String divisionId;
+	
+	@DateTimeFormat(pattern="dd.MM.yyyy hh:mm")
+	@LastModifiedDate
+	private LocalDateTime  modifiedAt;
 	
 	
 

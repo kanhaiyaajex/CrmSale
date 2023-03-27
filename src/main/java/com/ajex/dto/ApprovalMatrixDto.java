@@ -1,7 +1,6 @@
 package com.ajex.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.ajex.entity.Division;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +14,12 @@ public class ApprovalMatrixDto {
 	
 	
 	
-	private String approvalMatrixId;
+private String approvalMatrixId;
 	
-	private String division;
+	private Division division;
+	
+	private boolean status;
+	
 	
 	
 }

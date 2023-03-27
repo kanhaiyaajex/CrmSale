@@ -1,29 +1,33 @@
 package com.ajex.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.ajex.entity.City;
+import com.ajex.entity.Country;
+import com.ajex.entity.Position;
+import com.ajex.entity.Region;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeDto {
 	
 	
-	
-	
-	private String empId;
+private Integer empId;
 	
 	
 	private String name;
-	private String countryId;
+	private Country countryId;
 	
-	private String regionId;
+	private Region regionId;
 	
-	
-	private String position;
+	private City cityId;
+
+	private Position positionId;
 	
 	private boolean statusId;
+
 
 }

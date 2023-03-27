@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,12 +34,22 @@ public class PositionController {
 	private PositionRepo  PositionRepo;
 	
 	
-	@GetMapping("/getCities")
-	public List<Position>  getAllPosition()
+	@GetMapping("/getPositions")
+	public ResponseEntity<?>  getAllPosition()
 	{
 		
-		List<Position>  allCities= PositionService.getAllPosition();
-		return allCities;
+		List<Position>  allPos= PositionService.getAllPosition();
+		Map<Object,Object> m = new HashMap<>();
+
+	
+        m.put("data",allPos );
+		
+		m.put("status","OK" );
+
+		m.put("statusCode","200" );
+		m.put("boolean","success");
+		
+		 return new ResponseEntity<>(m, HttpStatus.OK);
 		
 	}
 	
@@ -57,7 +67,7 @@ public class PositionController {
 	
 	@PostMapping("/updatePosition/{id}")
 	
-		public PositionDto updatePosition(@PathVariable("id") String id, @RequestBody Position Position) {
+		public PositionDto updatePosition(@PathVariable("id") Integer id, @RequestBody Position Position) {
 			
 				  
 				  return  PositionService.updatePosition(id, Position);
@@ -68,7 +78,7 @@ public class PositionController {
 	
 	
 	@PostMapping("/deletePosition/{id}")
-	public Map<String,Object> deletePosition(@PathVariable String id)
+	public Map<String,Object> deletePosition(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

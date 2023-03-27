@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ajex.dto.RateCardDto;
 import com.ajex.entity.RateCard;
+import com.ajex.exception.ResourceNotFoundException;
 import com.ajex.repository.RateCardRepo;
 import com.ajex.service.RateCardService;
 
@@ -34,18 +35,33 @@ public class RateCardController {
 	private RateCardRepo  RateCardRepo;
 	
 	
-	@GetMapping("/getCities")
-	public List<RateCard>  getAllRateCard()
+	@GetMapping("/getRateCards")
+	public ResponseEntity<?>  getAllRateCard()
 	{
 		
-		List<RateCard>  allCities= RateCardService.getAllRateCard();
-		return allCities;
+		List<RateCard>  allRateCards= RateCardService.getAllRateCard();
+		
+Map<Object,Object> m = new HashMap<>();
+
+		
+		
+		
+
+		
+        m.put("data",allRateCards );
+		
+		m.put("status","OK" );
+
+		m.put("statusCode","200" );
+		m.put("boolean","success");
+		
+		 return new ResponseEntity<>(m, HttpStatus.OK);      
 		
 	}
 	
 	
 	@PostMapping("/addRateCard")
-	public RateCardDto  addRateCard(@RequestBody   RateCard RateCard)
+	public RateCardDto  addRateCard(@RequestBody   RateCard RateCard) throws ResourceNotFoundException
 	{
 		
 		RateCardDto  RateCardVal= RateCardService.addRateCard(RateCard);
@@ -57,7 +73,7 @@ public class RateCardController {
 	
 	@PostMapping("/updateRateCard/{id}")
 	
-		public RateCardDto updateRateCard(@PathVariable("id") String id, @RequestBody RateCard RateCard) {
+		public RateCardDto updateRateCard(@PathVariable("id") Integer id, @RequestBody RateCard RateCard) {
 			
 				  
 				  return  RateCardService.updateRateCard(id, RateCard);
@@ -68,7 +84,7 @@ public class RateCardController {
 	
 	
 	@PostMapping("/deleteRateCard/{id}")
-	public Map<String,Object> deleteRateCard(@PathVariable String id)
+	public Map<String,Object> deleteRateCard(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

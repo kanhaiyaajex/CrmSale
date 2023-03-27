@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import static com.ajex.entity.PortCities.*;
+
+
 import com.ajex.dto.PortCitiesDto;
 import com.ajex.entity.PortCities;
 import com.ajex.repository.PortCitiesRepo;
@@ -22,36 +25,42 @@ public class PortCitiesServiceImpl implements PortCitiesService {
 
 
 @Autowired
+private com.ajex.entity.SequenceGeneratorService service;
+
+
+
+
+@Autowired
 private PortCitiesRepo  PortCitiesRepo;
 
 
 	@Override
-	public PortCitiesDto addPortCities(PortCities PortCities) {
+	public PortCitiesDto addPortCities(PortCities portCities) {
   
 		
-		PortCities PortCitiesValue=PortCitiesRepo.save(PortCities);
+		portCities.setPortId(service.getSequenceNumber(SEQUENCE_NAME));
+		PortCities PortCitiesValue=PortCitiesRepo.save(portCities);
 		PortCitiesDto PortCitiesDto = new ModelMapper().map(PortCitiesValue, PortCitiesDto.class);
 
 		return PortCitiesDto;
 	}
 
 	@Override
-	public PortCitiesDto updatePortCities(String id,PortCities PortCities) {
+	public PortCitiesDto updatePortCities(Integer id,PortCities portCities) {
 
 		PortCitiesDto PortCitiesDto=null;
 		Optional<PortCities> PortCitiesData = PortCitiesRepo.findById(id);
 
 		  if (PortCitiesData.isPresent()) {
 		    PortCities PortCitiesVal = new PortCities();
-//		    PortCitiesVal.setPortCitiesId(id);
-//		    PortCitiesVal.setPortCitiesNameInAr(PortCities.getPortCitiesNameInAr());
-//		    PortCitiesVal.setPortCitiesCode(PortCities.getPortCitiesCode());
-//		    PortCitiesVal.setCountryId(PortCities.getCountryId());
-//		    PortCitiesVal.setRegionId(PortCities.getRegionId());
-//		    PortCitiesVal.setStatusId(PortCities.isStatusId());
+		    PortCitiesVal.setPortId(id);
+		    PortCitiesVal.setPortCityName(portCities.getPortCityName());
+		    PortCitiesVal.setPortType(portCities.getPortType());
+		    PortCitiesVal.setCityId(portCities.getCityId());
+		    PortCitiesVal.setCountryId(portCities.getCountryId());
+		    PortCitiesVal.setStatusId(portCities.isStatusId());
 		    
-		    PortCitiesRepo.save(PortCities);
-			PortCitiesDto = new ModelMapper().map(PortCitiesRepo.save(PortCities), PortCitiesDto.class);
+			PortCitiesDto = new ModelMapper().map(PortCitiesRepo.save(portCities), PortCitiesDto.class);
 
 		  }
 		  return PortCitiesDto;	}
@@ -59,7 +68,7 @@ private PortCitiesRepo  PortCitiesRepo;
 
 
 	@Override
-	public void deletePortCities(String id) {
+	public void deletePortCities(Integer id) {
 
 		PortCities PortCitiesValue= PortCitiesRepo.findById(id).get();
 		

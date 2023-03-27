@@ -9,10 +9,10 @@ public interface PortCitiesService {
 	
 	public PortCitiesDto addPortCities(PortCities PortCities);
 	
-	public PortCitiesDto updatePortCities(String id,PortCities PortCities);
+	public PortCitiesDto updatePortCities(Integer id,PortCities PortCities);
 
 	
-	public void deletePortCities(String id);
+	public void deletePortCities(Integer id);
 	
 	
 	public List<PortCities> getAllPortCities();

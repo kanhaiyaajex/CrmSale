@@ -4,6 +4,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.ajex.entity.ShipmentMode;
 
-public interface ShipmentModeRepo extends MongoRepository<ShipmentMode, String> {
+public interface ShipmentModeRepo extends MongoRepository<ShipmentMode, Integer> {
 
 }

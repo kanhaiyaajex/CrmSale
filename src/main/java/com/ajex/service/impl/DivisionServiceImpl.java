@@ -3,6 +3,9 @@ package com.ajex.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ajex.entity.CityGroup.SEQUENCE_NAME;
+import static com.ajex.entity.Division.*;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,33 +25,39 @@ public class DivisionServiceImpl implements DivisionService {
 
 
 @Autowired
+private com.ajex.entity.SequenceGeneratorService service;
+
+
+@Autowired
 private DivisionRepo  DivisionRepo;
 
 
+
+
+
 	@Override
-	public DivisionDto addDivision(Division Division) {
+	public DivisionDto addDivision(Division division) {
   
+		division.setDivisionId(service.getSequenceNumber(SEQUENCE_NAME));
 		
-		Division DivisionValue=DivisionRepo.save(Division);
+		Division DivisionValue=DivisionRepo.save(division);
 		DivisionDto DivisionDto = new ModelMapper().map(DivisionValue, DivisionDto.class);
 
 		return DivisionDto;
 	}
 
 	@Override
-	public DivisionDto updateDivision(String id,Division Division) {
+	public DivisionDto updateDivision(Integer id,Division Division) {
 
 		DivisionDto DivisionDto=null;
 		Optional<Division> DivisionData = DivisionRepo.findById(id);
 
 		  if (DivisionData.isPresent()) {
 		    Division DivisionVal = new Division();
-//		    DivisionVal.setDivisionId(id);
-//		    DivisionVal.setDivisionNameInAr(Division.getDivisionNameInAr());
-//		    DivisionVal.setDivisionCode(Division.getDivisionCode());
-//		    DivisionVal.setCountryId(Division.getCountryId());
-//		    DivisionVal.setRegionId(Division.getRegionId());
-//		    DivisionVal.setStatusId(Division.isStatusId());
+		    DivisionVal.setDivisionId(Division.getDivisionId());
+		    DivisionVal.setDivisionName(Division.getDivisionName());
+		   
+		    DivisionVal.setStatusId(Division.isStatusId());
 		    
 		    DivisionRepo.save(Division);
 			DivisionDto = new ModelMapper().map(DivisionRepo.save(Division), DivisionDto.class);
@@ -59,7 +68,7 @@ private DivisionRepo  DivisionRepo;
 
 
 	@Override
-	public void deleteDivision(String id) {
+	public void deleteDivision(Integer id) {
 
 		Division DivisionValue= DivisionRepo.findById(id).get();
 		

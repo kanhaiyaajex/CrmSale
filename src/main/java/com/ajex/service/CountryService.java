@@ -10,12 +10,12 @@ import com.ajex.entity.Country;
 public interface CountryService {
 	
 	
-    public CountryDto addCountry(Country city);
+    public CountryDto addCountry(Country country);
 	
-	public CountryDto updateCountry(String id,Country city);
+	public CountryDto updateCountry(Country country);
 
 	
-	public void deleteCountry(String id);
+	public void deleteCountry(Integer id);
 	
 	
 	public List<Country> getAllCountries();

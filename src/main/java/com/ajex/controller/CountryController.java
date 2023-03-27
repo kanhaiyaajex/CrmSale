@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ajex.dto.CountryDto;
+import com.ajex.entity.CityGroup;
 import com.ajex.entity.Country;
 import com.ajex.repository.CountryRepo;
 import com.ajex.service.CountryService;
@@ -34,12 +36,26 @@ public class CountryController {
 	private CountryRepo  CountryRepo;
 	
 	
-	@GetMapping("/getCities")
-	public List<Country>  getAllCountry()
+	@GetMapping("/getCountries")
+	public ResponseEntity<?>  getAllCountry()
 	{
+		Map<Object,Object> m = new HashMap<>();
+
+		List<Country>  allCountries= CountryService.getAllCountries();
 		
-		List<Country>  allCities= CountryService.getAllCountries();
-		return allCities;
+		
+		
+
+			
+             m.put("data",allCountries );
+			
+			m.put("status","OK" );
+
+			m.put("statusCode","200" );
+			m.put("boolean","success");
+			
+			 return new ResponseEntity<>(m, HttpStatus.OK);
+			 
 		
 	}
 	
@@ -55,12 +71,12 @@ public class CountryController {
 	
 	
 	
-	@PostMapping("/updateCountry/{id}")
+	@PostMapping("/updateCountry")
 	
-		public CountryDto updateCountry(@PathVariable("id") String id, @RequestBody Country Country) {
+		public CountryDto updateCountry(@Validated @RequestBody Country country) {
 			
 				  
-				  return  CountryService.updateCountry(id, Country);
+				  return  CountryService.updateCountry(country);
 				  
 			  
 			 
@@ -68,7 +84,7 @@ public class CountryController {
 	
 	
 	@PostMapping("/deleteCountry/{id}")
-	public Map<String,Object> deleteCountry(@PathVariable String id)
+	public Map<String,Object> deleteCountry(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

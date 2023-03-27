@@ -3,6 +3,10 @@ package com.ajex.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ajex.entity.Position.*;
+
+
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,21 +26,25 @@ public class PositionServiceImpl implements PositionService {
 
 
 @Autowired
+private com.ajex.entity.SequenceGeneratorService service;
+
+@Autowired
 private PositionRepo  PositionRepo;
 
 
 	@Override
-	public PositionDto addPosition(Position Position) {
+	public PositionDto addPosition(Position position) {
   
 		
-		Position PositionValue=PositionRepo.save(Position);
+		position.setPositionId(service.getSequenceNumber(SEQUENCE_NAME));
+		Position PositionValue=PositionRepo.save(position);
 		PositionDto PositionDto = new ModelMapper().map(PositionValue, PositionDto.class);
 
 		return PositionDto;
 	}
 
 	@Override
-	public PositionDto updatePosition(String id,Position Position) {
+	public PositionDto updatePosition(Integer id,Position position) {
 
 		PositionDto PositionDto=null;
 		Optional<Position> PositionData = PositionRepo.findById(id);
@@ -44,14 +52,12 @@ private PositionRepo  PositionRepo;
 		  if (PositionData.isPresent()) {
 		    Position PositionVal = new Position();
 		    PositionVal.setPositionId(id);
-//		    PositionVal.setPositionNameInAr(Position.getPositionNameInAr());
-//		    PositionVal.setPositionCode(Position.getPositionCode());
-//		    PositionVal.setCountryId(Position.getCountryId());
-//		    PositionVal.setRegionId(Position.getRegionId());
-//		    PositionVal.setStatusId(Position.isStatusId());
+		    PositionVal.setPositionName(position.getPositionName());
+		    PositionVal.setOrderId(position.getOrderId());
 		    
-		    PositionRepo.save(Position);
-			PositionDto = new ModelMapper().map(PositionRepo.save(Position), PositionDto.class);
+		    PositionVal.setStatusId(position.isStatusId());
+		    
+			PositionDto = new ModelMapper().map(PositionRepo.save(position), PositionDto.class);
 
 		  }
 		  return PositionDto;	}
@@ -59,7 +65,7 @@ private PositionRepo  PositionRepo;
 
 
 	@Override
-	public void deletePosition(String id) {
+	public void deletePosition(Integer id) {
 
 		Position PositionValue= PositionRepo.findById(id).get();
 		

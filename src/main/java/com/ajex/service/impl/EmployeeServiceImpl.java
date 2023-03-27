@@ -3,6 +3,8 @@ package com.ajex.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ajex.entity.Employee.*;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,21 +24,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
 @Autowired
+private com.ajex.entity.SequenceGeneratorService service;
+
+@Autowired
 private EmployeeRepo  EmployeeRepo;
 
 
 	@Override
-	public EmployeeDto addEmployee(Employee Employee) {
+	public EmployeeDto addEmployee(Employee employee) {
   
-		
-		Employee EmployeeValue=EmployeeRepo.save(Employee);
+		employee.setEmpId(service.getSequenceNumber(SEQUENCE_NAME));
+		Employee EmployeeValue=EmployeeRepo.save(employee);
 		EmployeeDto EmployeeDto = new ModelMapper().map(EmployeeValue, EmployeeDto.class);
 
 		return EmployeeDto;
 	}
 
 	@Override
-	public EmployeeDto updateEmployee(String id,Employee Employee) {
+	public EmployeeDto updateEmployee(Integer id,Employee employee) {
 
 		EmployeeDto EmployeeDto=null;
 		Optional<Employee> EmployeeData = EmployeeRepo.findById(id);
@@ -44,14 +49,13 @@ private EmployeeRepo  EmployeeRepo;
 		  if (EmployeeData.isPresent()) {
 		    Employee EmployeeVal = new Employee();
 		    EmployeeVal.setEmpId(id);
-//		    EmployeeVal.setEmployeeNameInAr(Employee.getEmployeeNameInAr());
-//		    EmployeeVal.setEmployeeCode(Employee.getEmployeeCode());
-//		    EmployeeVal.setCountryId(Employee.getCountryId());
-//		    EmployeeVal.setRegionId(Employee.getRegionId());
-//		    EmployeeVal.setStatusId(Employee.isStatusId());
+		    EmployeeVal.setName(employee.getName());
+		    EmployeeVal.setCountryId(employee.getCountryId());
+		    EmployeeVal.setRegionId(employee.getRegionId());
+		    EmployeeVal.setStatusId(employee.isStatusId());
 		    
-		    EmployeeRepo.save(Employee);
-			EmployeeDto = new ModelMapper().map(EmployeeRepo.save(Employee), EmployeeDto.class);
+		   
+			EmployeeDto = new ModelMapper().map(EmployeeRepo.save(employee), EmployeeDto.class);
 
 		  }
 		  return EmployeeDto;	}
@@ -59,9 +63,9 @@ private EmployeeRepo  EmployeeRepo;
 
 
 	@Override
-	public void deleteEmployee(String id) {
+	public void deleteEmployee(Integer id) {
 
-		Employee EmployeeValue= EmployeeRepo.findById(id).get();
+		Employee EmployeeValue= EmployeeRepo.findById( id).get();
 		
 		if(EmployeeValue!=null)
 		{

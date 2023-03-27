@@ -1,8 +1,10 @@
 package com.ajex.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
@@ -11,20 +13,44 @@ import lombok.Data;
 @Document(collection = "employee")
 public class Employee {
 	
-	
+
+    @Transient
+    public static final String SEQUENCE_NAME = "emp_sequence";
 	
 	@Id
-	private String empId;
+	private Integer empId;
 	
-	
+    @NotNull(message = "Name   is mandatory")
+
 	private String name;
-	private String countryId;
+    
+    @NotNull(message = "Country Id  is mandatory")
+
+	private Country countryId;
 	
-	private String regionId;
+    
+    @NotNull(message = "Region Id  is mandatory")
+
+	private Region regionId;
 	
+    
+    @NotNull(message = "City Id  is mandatory")
+
+	private City cityId;
+
+    
+    @NotNull(message = "Position Id  is mandatory")
+
+	private Position positionId;
+    
+    
+
+    @NotNull(message = "Division Id  is mandatory")
+
+	private Division divisionId;
+    
+    
 	
-	private String position;
-	
-	private boolean statusId;
+    private boolean  statusId=true;
 
 }

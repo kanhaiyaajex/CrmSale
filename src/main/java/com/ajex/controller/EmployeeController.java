@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ajex.dto.EmployeeDto;
+import com.ajex.entity.Division;
 import com.ajex.entity.Employee;
 import com.ajex.repository.EmployeeRepo;
 import com.ajex.service.EmployeeService;
@@ -34,12 +35,27 @@ public class EmployeeController {
 	private EmployeeRepo  EmployeeRepo;
 	
 	
-	@GetMapping("/getCities")
-	public List<Employee>  getAllEmployee()
+	@GetMapping("/getEmployees")
+	public ResponseEntity<?>  getAllEmployee()
 	{
 		
-		List<Employee>  allCities= EmployeeService.getAllEmployee();
-		return allCities;
+		List<Employee>  allEmp= EmployeeService.getAllEmployee();
+		
+		Map<Object,Object> m = new HashMap<>();
+
+		
+		
+		
+
+			
+             m.put("data",allEmp );
+			
+			m.put("status","OK" );
+
+			m.put("statusCode","200" );
+			m.put("boolean","success");
+			
+			 return new ResponseEntity<>(m, HttpStatus.OK);
 		
 	}
 	
@@ -57,7 +73,7 @@ public class EmployeeController {
 	
 	@PostMapping("/updateEmployee/{id}")
 	
-		public EmployeeDto updateEmployee(@PathVariable("id") String id, @RequestBody Employee Employee) {
+		public EmployeeDto updateEmployee(@PathVariable("id") Integer id, @RequestBody Employee Employee) {
 			
 				  
 				  return  EmployeeService.updateEmployee(id, Employee);
@@ -68,7 +84,7 @@ public class EmployeeController {
 	
 	
 	@PostMapping("/deleteEmployee/{id}")
-	public Map<String,Object> deleteEmployee(@PathVariable String id)
+	public Map<String,Object> deleteEmployee(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

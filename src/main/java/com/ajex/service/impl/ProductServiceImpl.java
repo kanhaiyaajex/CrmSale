@@ -13,6 +13,7 @@ import com.ajex.dto.ProductDto;
 import com.ajex.entity.Product;
 import com.ajex.repository.ProductRepo;
 import com.ajex.service.ProductService;
+import static com.ajex.entity.Product.*;
 
 
 
@@ -22,21 +23,26 @@ public class ProductServiceImpl implements ProductService {
 
 
 @Autowired
+private com.ajex.entity.SequenceGeneratorService service;
+
+
+
+@Autowired
 private ProductRepo  ProductRepo;
 
 
 	@Override
-	public ProductDto addProduct(Product Product) {
+	public ProductDto addProduct(Product product) {
   
-		
-		Product ProductValue=ProductRepo.save(Product);
+		product.setProductId(service.getSequenceNumber(SEQUENCE_NAME));
+		Product ProductValue=ProductRepo.save(product);
 		ProductDto ProductDto = new ModelMapper().map(ProductValue, ProductDto.class);
 
 		return ProductDto;
 	}
 
 	@Override
-	public ProductDto updateProduct(String id,Product Product) {
+	public ProductDto updateProduct(Integer id,Product product) {
 
 		ProductDto ProductDto=null;
 		Optional<Product> ProductData = ProductRepo.findById(id);
@@ -44,14 +50,12 @@ private ProductRepo  ProductRepo;
 		  if (ProductData.isPresent()) {
 		    Product ProductVal = new Product();
 		    ProductVal.setProductId(id);
-//		    ProductVal.setProductNameInAr(Product.getProductNameInAr());
-//		    ProductVal.setProductCode(Product.getProductCode());
-//		    ProductVal.setCountryId(Product.getCountryId());
-//		    ProductVal.setRegionId(Product.getRegionId());
-//		    ProductVal.setStatusId(Product.isStatusId());
+		    ProductVal.setNameInAr(product.getNameInAr());
+		    ProductVal.setDivisionId(product.getDivisionId());
+		    ProductVal.setStatusId(product.isStatusId());
 		    
-		    ProductRepo.save(Product);
-			ProductDto = new ModelMapper().map(ProductRepo.save(Product), ProductDto.class);
+		    ProductRepo.save(product);
+			ProductDto = new ModelMapper().map(ProductRepo.save(product), ProductDto.class);
 
 		  }
 		  return ProductDto;	}
@@ -59,7 +63,7 @@ private ProductRepo  ProductRepo;
 
 
 	@Override
-	public void deleteProduct(String id) {
+	public void deleteProduct(Integer id) {
 
 		Product ProductValue= ProductRepo.findById(id).get();
 		

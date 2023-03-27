@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,11 +35,25 @@ public class ProductController {
 	
 	
 	@GetMapping("/getCities")
-	public List<Product>  getAllProduct()
+	public  ResponseEntity<?>  getAllProduct()
 	{
 		
 		List<Product>  allCities= ProductService.getAllProduct();
-		return allCities;
+Map<Object,Object> m = new HashMap<>();
+
+		
+		
+		
+
+		
+        m.put("data",allCities );
+		
+		m.put("status","OK" );
+
+		m.put("statusCode","200" );
+		m.put("boolean","success");
+		
+		 return new ResponseEntity<>(m, HttpStatus.OK);      
 		
 	}
 	
@@ -57,7 +71,7 @@ public class ProductController {
 	
 	@PostMapping("/updateProduct/{id}")
 	
-		public ProductDto updateProduct(@PathVariable("id") String id, @RequestBody Product Product) {
+		public ProductDto updateProduct(@PathVariable("id") Integer id, @RequestBody Product Product) {
 			
 				  
 				  return  ProductService.updateProduct(id, Product);
@@ -68,7 +82,7 @@ public class ProductController {
 	
 	
 	@PostMapping("/deleteProduct/{id}")
-	public Map<String,Object> deleteProduct(@PathVariable String id)
+	public Map<String,Object> deleteProduct(@PathVariable Integer id)
 	{
 		Map<String,Object> m=new HashMap<>();
 		

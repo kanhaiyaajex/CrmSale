@@ -1,16 +1,19 @@
 package com.ajex.service.impl;
 
+import static com.ajex.entity.RateCard.SEQUENCE_NAME;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ajex.dto.RateCardDto;
+import com.ajex.entity.Product;
 import com.ajex.entity.RateCard;
+import com.ajex.exception.ResourceNotFoundException;
+import com.ajex.repository.ProductRepo;
 import com.ajex.repository.RateCardRepo;
 import com.ajex.service.RateCardService;
 
@@ -22,36 +25,47 @@ public class RateCardServiceImpl implements RateCardService {
 
 
 @Autowired
+private com.ajex.entity.SequenceGeneratorService service;
+
+
+
+@Autowired
 private RateCardRepo  RateCardRepo;
 
 
+
+@Autowired
+private ProductRepo  productRepo;
+
 	@Override
-	public RateCardDto addRateCard(RateCard RateCard) {
+	public RateCardDto addRateCard(RateCard rateCard) throws ResourceNotFoundException {
   
-		
-		RateCard RateCardValue=RateCardRepo.save(RateCard);
+		Product productValue= productRepo.findById(rateCard.getProductId().getProductId()).get();
+if(productValue==null)
+{
+	
+	throw new ResourceNotFoundException("Product does not exist");
+}
+        rateCard.setProductId(productValue);
+		rateCard.setRateCardId(service.getSequenceNumber(SEQUENCE_NAME));
+		RateCard RateCardValue=RateCardRepo.save(rateCard);
 		RateCardDto RateCardDto = new ModelMapper().map(RateCardValue, RateCardDto.class);
 
 		return RateCardDto;
 	}
 
 	@Override
-	public RateCardDto updateRateCard(String id,RateCard RateCard) {
+	public RateCardDto updateRateCard(Integer id,RateCard rateCard) {
 
 		RateCardDto RateCardDto=null;
 		Optional<RateCard> RateCardData = RateCardRepo.findById(id);
 
 		  if (RateCardData.isPresent()) {
-		    RateCard RateCardVal = new RateCard();
-		    RateCardVal.setRateCardId(id);
-//		    RateCardVal.setRateCardNameInAr(RateCard.getRateCardNameInAr());
-//		    RateCardVal.setRateCardCode(RateCard.getRateCardCode());
-//		    RateCardVal.setCountryId(RateCard.getCountryId());
-//		    RateCardVal.setRegionId(RateCard.getRegionId());
-//		    RateCardVal.setStatusId(RateCard.isStatusId());
+			  RateCardData.get().setRateCardId(id);
+
 		    
-		    RateCardRepo.save(RateCard);
-			RateCardDto = new ModelMapper().map(RateCardRepo.save(RateCard), RateCardDto.class);
+		    RateCardRepo.save(RateCardData.get());
+			RateCardDto = new ModelMapper().map(RateCardRepo.save(RateCardData.get()), RateCardDto.class);
 
 		  }
 		  return RateCardDto;	}
@@ -59,7 +73,7 @@ private RateCardRepo  RateCardRepo;
 
 
 	@Override
-	public void deleteRateCard(String id) {
+	public void deleteRateCard(Integer id) {
 
 		RateCard RateCardValue= RateCardRepo.findById(id).get();
 		
